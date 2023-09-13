@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { ChangeEvent } from 'react'
 import { ToggleSwitch } from './toggle-switch'
+import { TimePiece } from './time-piece'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [selected, setSelected] = useState(false)
+  const [selectedMode, setSelectedMode] = useState(false)
+  let mode = selectedMode ? 'stopwatch' : 'clock';
 
   const handleCheckBox = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelected((event.target as HTMLInputElement).checked);
+    setSelectedMode((event.target as HTMLInputElement).checked);
   }
-
 
   return (
     <>
-      <ToggleSwitch checked={selected} onChange={handleCheckBox} />
-      {selected ? <h3>Stopwatch</h3> : <h3>Clock</h3>}
+      <ToggleSwitch checked={selectedMode} onChange={handleCheckBox} title='Select a Mode' />
+      <TimePiece mode={mode} />
     </>
   )
 }
