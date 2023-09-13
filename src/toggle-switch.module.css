@@ -1,0 +1,62 @@
+.root {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background: var(--sea-nymph);
+    width: 300px;
+    height: 100px;
+    padding: 2rem;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--vogue-blue);
+    border-radius: 34px;
+    
+}
+
+.switch:hover {
+    cursor: pointer;
+}
+
+input:checked + .slider {
+    background-color: var(--cinnabar);
+}
+
+.slider::before {
+    position: absolute;
+    background-color: var(--chamois);
+    content: "";
+    left: 4px;
+    bottom: 4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    transition: .5s;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(46px);
+    -ms-transform: translateX(46px);
+    transform: translateX(46px);
+}
+
+

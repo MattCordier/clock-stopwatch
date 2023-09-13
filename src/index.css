@@ -1,0 +1,83 @@
+
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  --cinnabar: #E65A31;
+  --chathams-blue: #125274;
+  --vogue-blue: #032B52;
+  --chamois: #EBD8AB;
+  --sea-nymph: #81AAA1;
+}
+
+#root,
+#__next, body {
+  isolation: isolate;
+  text-align: center;
+}
+
+html,
+body {
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--chathams-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
