@@ -5,7 +5,7 @@ const useClock = () => {
     const [minutes, setMinutes] = useState(0)
     const [hours, setHours] = useState(0)
 
-    function setClock(now: Date) {
+    const setClock = (now: Date) => {
         setSeconds(now.getSeconds())
         setMinutes(now.getMinutes())
         setHours(now.getHours())
