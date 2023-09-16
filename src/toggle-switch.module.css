@@ -6,6 +6,7 @@
     width: 300px;
     height: 100px;
     padding: 2rem;
+    margin: 0 auto;
 }
 
 .switch input {

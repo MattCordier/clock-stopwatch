@@ -35,10 +35,10 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   background-color: var(--chathams-blue);
+  color: var(--chamois);
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 img,
