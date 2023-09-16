@@ -11,13 +11,9 @@ export function TimePiece(props: any) {
 
     return (
         <TimePieceCanvas mode={mode} ss={seconds} mm={minutes} hh={hours} tick={tick} size={600}>
-
             <button onClick={handleStart}>Start</button>
             <button onClick={handlePause}>Pause</button>
             <button onClick={handleReset}>Reset</button>
-            <h3>{tick}</h3>
-
-
         </TimePieceCanvas>
     )
 }

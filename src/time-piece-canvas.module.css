@@ -1,4 +1,19 @@
+.root {
+    position: relative;
+}
+
+.title {
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+}
+
 .canvas {
     background-color: var(--chathams-blue);
-    position: relative;
+}
+
+.controlsWrapper {
+    position: absolute;
+    top: 0;
+    margin: 1rem auto;
+    width: 100%;
 }

@@ -24,13 +24,20 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
 
     const drawTicMarks = (ctx: CanvasRenderingContext2D, hex: string, centerX: number, centerY: number, timePieceSize: number) => {
         ctx.strokeStyle = hex
-        ctx.lineWidth = 3;
+
+        ctx.lineWidth = 2;
         ctx.translate(centerX, centerY);
-        for (let i = 1; i <= 12; i++) {
+        for (let i = 1; i <= 60; i++) {
             ctx.beginPath();
-            ctx.rotate(Math.PI / 6);
+            // based off math from after https://www.w3schools.com/graphics/canvas_clock_numbers.asp
+            ctx.rotate(Math.PI / 30);
             ctx.moveTo(timePieceSize * .525, 0);
-            ctx.lineTo(timePieceSize * .475, 0);
+
+            if (i % 5 === 0) {
+                ctx.lineTo(timePieceSize * .4, 0);
+            } else {
+                ctx.lineTo(timePieceSize * .475, 0);
+            }
             ctx.stroke();
         }
         ctx.translate(-centerX, -centerY);
@@ -68,19 +75,18 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
         ctx.arc(centerX, centerY, timePieceSize * .65, 0, Math.PI * 2)
         ctx.fill();
 
-        // tic marks
-        drawTicMarks(ctx, '#032B52', centerX, centerY, timePieceSize)
-
         // mode is a prop passed into component - clock or stopwatch
         if (mode == 'clock') {
             // clock
             drawBorderRing(ctx, '#032B52', timePieceSize, centerX, centerY)
             drawCenterPin(ctx, '#032B52', centerX, centerY)
+            drawTicMarks(ctx, '#032B52', centerX, centerY, timePieceSize)
             drawNumbers(ctx, '#032B52', 0.05, 12, 6, centerX, centerY)
         } else {
             //stopwatch 
             drawBorderRing(ctx, '#E65A31', timePieceSize, centerX, centerY)
             drawCenterPin(ctx, '#E65A31', centerX, centerY)
+            drawTicMarks(ctx, '#032B52', centerX, centerY, timePieceSize)
             drawNumbers(ctx, '#032B52', 0.0275, 60, 30, centerX, centerY)
         }
     }
@@ -94,16 +100,14 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
     }, [mode]);
 
     return (<>
-        <h3>{mode}</h3>
-
-        {(mode == 'stopwatch' ? (
-            <>{children}</>
-        ) : (
-            <h3>Clock {hh} : {mm} : {ss} </h3>
-        )
-        )}
-
-        <canvas ref={canvasRef} height={size} width={size} className={styles.canvas}></canvas>
+        <div className={styles.root}>
+            <canvas ref={canvasRef} height={size} width={size} className={styles.canvas}>
+            </canvas>
+            <div className={styles.controlsWrapper}>
+                <h3 className={styles.title}>{mode}</h3>
+                {mode == 'stopwatch' && (children)}
+            </div>
+        </div>
     </>
     )
 }
