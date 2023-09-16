@@ -1,5 +1,6 @@
 import useClock from "./hooks/useClock";
 import useStopWatch from "./hooks/useStopWatch";
+import { TimePieceCanvas } from "./time-piece-canvas";
 
 export function TimePiece(props: any) {
 
@@ -8,14 +9,15 @@ export function TimePiece(props: any) {
     const { seconds, minutes, hours } = useClock()
     const { tick, handleStart, handlePause, handleReset } = useStopWatch()
 
-    return (mode == 'clock') ?
-        (<h3>Clock {hours} : {minutes} : {seconds} </h3>) :
-        (<>
-            <h3>Stopwatch</h3>
+    return (
+        <TimePieceCanvas mode={mode} ss={seconds} mm={minutes} hh={hours} tick={tick} size={900}>
+
             <button onClick={handleStart}>Start</button>
             <button onClick={handlePause}>Pause</button>
             <button onClick={handleReset}>Reset</button>
             <h3>{tick}</h3>
-        </>
-        )
+
+
+        </TimePieceCanvas>
+    )
 }
