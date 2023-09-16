@@ -1,12 +1,25 @@
 .root {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    background: var(--sea-nymph);
+    background: var(--chamois);
     width: 300px;
     height: 100px;
     padding: 2rem;
     margin: 0 auto;
+    border-radius: 5px;
+}
+
+.title {
+    color: var(--vogue-blue);
+}
+
+.toggleWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
 .switch input {
@@ -58,6 +71,11 @@ input:checked + .slider:before {
     -webkit-transform: translateX(46px);
     -ms-transform: translateX(46px);
     transform: translateX(46px);
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
 }
 
 

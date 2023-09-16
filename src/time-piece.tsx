@@ -10,7 +10,7 @@ export function TimePiece(props: any) {
     const { tick, handleStart, handlePause, handleReset } = useStopWatch()
 
     return (
-        <TimePieceCanvas mode={mode} ss={seconds} mm={minutes} hh={hours} tick={tick} size={900}>
+        <TimePieceCanvas mode={mode} ss={seconds} mm={minutes} hh={hours} tick={tick} size={600}>
 
             <button onClick={handleStart}>Start</button>
             <button onClick={handlePause}>Pause</button>
