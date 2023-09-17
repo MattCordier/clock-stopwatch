@@ -1,29 +1,74 @@
-import { useEffect, useRef, ReactNode } from "react";
+import { useEffect, useRef, useState, ReactNode } from "react";
 import styles from './time-piece-canvas.module.css'
 
 
 export function TimePieceCanvas(props: TimePieceCanvasProps) {
-    const { mode, ss, mm, hh, tick, size, children } = props
+    const { mode, size, ss, mm, hh, tick, children } = props
 
     const canvasRef = useRef(null);
-    const drawBorderRing = (ctx: CanvasRenderingContext2D, hex: string, timePieceSize: number, centerX: number, centerY: number) => {
+
+    const timePieceSize = size * .38;
+    const centerX = size / 2
+    const centerY = size / 2
+
+    useEffect(() => {
+        const canvas: any = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+
+        const render = () => {
+            drawTimePiece(ctx);
+            requestAnimationFrame(render);
+        };
+        requestAnimationFrame(render);
+
+    }, [tick, ss]);
+
+    const drawTimePiece = (ctx: CanvasRenderingContext2D) => {
+        ctx.clearRect(0, 0, size, size);
+        let hex = '#032B52';
+
+        // mode is a prop passed into component - clock or stopwatch
+        if (mode == 'stopwatch') {
+            hex = '#E65A31';
+        }
+
+        // timepiece face
+        ctx.fillStyle = '#EBD8AB'
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, timePieceSize * .65, 0, Math.PI * 2)
+        ctx.fill();
+
         //boder ring
         ctx.strokeStyle = hex;
         ctx.lineWidth = timePieceSize * .07;
         ctx.beginPath();
         ctx.arc(centerX, centerY, timePieceSize * .7, 0, Math.PI * 2);
         ctx.stroke();
-    }
 
-    const drawCenterPin = (ctx: CanvasRenderingContext2D, hex: string, centerX: number, centerY: number) => {
+        drawTicMarks(ctx)
+        drawNumbers(ctx, mode)
+
+        let minutesElapsed = 0
+        if (mode == 'clock') {
+            drawArm(ctx, hh / 12, 8, (timePieceSize / 2) * 0.575, '#032B52'); // Hour
+            drawArm(ctx, mm / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
+            drawArm(ctx, ss / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
+        } else {
+            minutesElapsed = tick / 60;
+            drawArm(ctx, minutesElapsed / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
+            drawArm(ctx, tick / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
+        }
+
+        // center pin
         ctx.fillStyle = hex
         ctx.beginPath();
         ctx.arc(centerX, centerY, 7, 0, Math.PI * 2);
         ctx.fill();
+
     }
 
-    const drawTicMarks = (ctx: CanvasRenderingContext2D, hex: string, centerX: number, centerY: number, timePieceSize: number) => {
-        ctx.strokeStyle = hex
+    const drawTicMarks = (ctx: CanvasRenderingContext2D) => {
+        ctx.strokeStyle = '#032B52';
 
         ctx.lineWidth = 2;
         ctx.translate(centerX, centerY);
@@ -43,14 +88,28 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
         ctx.translate(-centerX, -centerY);
     }
 
-    const drawNumbers = (ctx: CanvasRenderingContext2D, hex: string, fontSize: number, ticNum: number, degree: number, centerX: number, centerY: number) => {
+    const drawNumbers = (ctx: CanvasRenderingContext2D, mode: string) => {
+        // defaults set for clock mode
+        let spacedNums = 12;
+        let degree = 6;
+        let fontPercent = 0.05;
+
+        if (mode == 'stopwatch') {
+            spacedNums = 60;
+            degree = 30;
+            fontPercent = 0.0275;
+        }
+
         // modeled after https://www.w3schools.com/graphics/canvas_clock_numbers.asp
         ctx.translate(centerX, centerY);
-        ctx.font = centerY * fontSize + "px arial";
+        // font scales in relationship to size prop
+        ctx.font = centerY * fontPercent + "px arial";
         ctx.textBaseline = "middle";
         ctx.textAlign = "center";
-        ctx.fillStyle = hex;
-        for (let num = 1; num <= ticNum; num++) {
+        ctx.fillStyle = '#032B52';
+
+
+        for (let num = 1; num <= spacedNums; num++) {
             let ang = num * Math.PI / degree;
             ctx.rotate(ang);
             ctx.translate(0, -centerY * 0.45);
@@ -63,41 +122,23 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
         ctx.translate(-centerX, -centerY);
     }
 
-    const drawTimePiece = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, size: number) => {
-        const timePieceSize = size * .38;
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        ctx.save()
+    function drawArm(ctx: CanvasRenderingContext2D, progress: number, armThickness: number, armLength: number, armColor: string) {
+        // concept and code pulled from https://www.kirupa.com/html5/create_an_analog_clock_using_the_canvas.htm
+        const TAU = 2 * Math.PI;
+        var armRadians = (TAU * progress) - (TAU / 4);
 
-        // timepiece face
-        ctx.fillStyle = '#EBD8AB'
+        var targetX = centerX + Math.cos(armRadians) * armLength;
+        var targetY = centerY + Math.sin(armRadians) * armLength;
+
+        ctx.lineCap = "round";
+        ctx.lineWidth = armThickness;
+        ctx.strokeStyle = armColor; // RED
+
         ctx.beginPath();
-        ctx.arc(centerX, centerY, timePieceSize * .65, 0, Math.PI * 2)
-        ctx.fill();
-
-        // mode is a prop passed into component - clock or stopwatch
-        if (mode == 'clock') {
-            // clock
-            drawBorderRing(ctx, '#032B52', timePieceSize, centerX, centerY)
-            drawCenterPin(ctx, '#032B52', centerX, centerY)
-            drawTicMarks(ctx, '#032B52', centerX, centerY, timePieceSize)
-            drawNumbers(ctx, '#032B52', 0.05, 12, 6, centerX, centerY)
-        } else {
-            //stopwatch 
-            drawBorderRing(ctx, '#E65A31', timePieceSize, centerX, centerY)
-            drawCenterPin(ctx, '#E65A31', centerX, centerY)
-            drawTicMarks(ctx, '#032B52', centerX, centerY, timePieceSize)
-            drawNumbers(ctx, '#032B52', 0.0275, 60, 30, centerX, centerY)
-        }
+        ctx.moveTo(centerX, centerY); // Start at the center
+        ctx.lineTo(targetX, targetY); // Draw a line outwards
+        ctx.stroke();
     }
-
-    useEffect(() => {
-        const canvas: any = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, size, size);
-        drawTimePiece(canvas, ctx, size);
-
-    }, [mode]);
 
     return (<>
         <div className={styles.root}>
