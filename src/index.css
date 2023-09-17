@@ -81,3 +81,17 @@ ul {
   line-height: 1.5;
   font-weight: 400;
 }
+
+button {
+  width: 80px;
+  color: var(--vogue-blue);
+  font-weight: bold;
+  padding: 4px 7px;
+  border: none;
+  border-radius: 5px;
+  margin: .75rem;
+}
+
+button:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,12 @@
+.startBtn {
+    background-color: var(--sea-nymph);
+}
+
+.pauseBtn {
+    color: var(--chamois);
+    background-color: var(--cinnabar);
+}
+
+.resetBtn {
+    background-color: var(--chamois);
+}
