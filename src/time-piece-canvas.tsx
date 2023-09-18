@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState, ReactNode } from "react";
+import useClock from "./hooks/useClock";
+
 import styles from './time-piece-canvas.module.css'
 
 
 export function TimePieceCanvas(props: TimePieceCanvasProps) {
-    const { mode, size, ss, mm, hh, tick, children } = props
+    const { mode, size, children, tick } = props;
+    const { seconds, minutes, hours } = useClock();
 
     const canvasRef = useRef(null);
 
     const timePieceSize = size * .38;
     const centerX = size / 2
     const centerY = size / 2
+
+
 
     useEffect(() => {
         const canvas: any = canvasRef.current;
@@ -21,7 +26,7 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
         };
         requestAnimationFrame(render);
 
-    }, [tick, ss]);
+    }, [tick, seconds]);
 
     const drawTimePiece = (ctx: CanvasRenderingContext2D) => {
         ctx.clearRect(0, 0, size, size);
@@ -48,22 +53,27 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
         drawTicMarks(ctx)
         drawNumbers(ctx, mode)
 
-        let minutesElapsed = 0
-        if (mode == 'clock') {
-            drawArm(ctx, hh / 12, 8, (timePieceSize / 2) * 0.575, '#032B52'); // Hour
-            drawArm(ctx, mm / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
-            drawArm(ctx, ss / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
-        } else {
-            minutesElapsed = tick / 60;
-            drawArm(ctx, minutesElapsed / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
-            drawArm(ctx, tick / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
-        }
-
+        animateArms(ctx);
         // center pin
         ctx.fillStyle = hex
         ctx.beginPath();
         ctx.arc(centerX, centerY, 7, 0, Math.PI * 2);
         ctx.fill();
+
+    }
+
+    const animateArms = (ctx: CanvasRenderingContext2D) => {
+
+        let minutesElapsed = 0
+        if (mode == 'clock') {
+            drawArm(ctx, hours / 12, 8, (timePieceSize / 2) * 0.575, '#032B52'); // Hour
+            drawArm(ctx, minutes / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
+            drawArm(ctx, seconds / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
+        } else {
+            minutesElapsed = tick / 60;
+            drawArm(ctx, minutesElapsed / 60, 4, (timePieceSize / 2) * 0.75, '#032B52'); // Minute
+            drawArm(ctx, tick / 60, 2, (timePieceSize / 2) * 0.9, '#E65A31'); // Second
+        }
 
     }
 
@@ -155,10 +165,7 @@ export function TimePieceCanvas(props: TimePieceCanvasProps) {
 
 export type TimePieceCanvasProps = {
     mode: string,
-    ss: number,
-    mm: number,
-    hh: number,
-    tick: number,
     size: number,
+    tick: number,
     children: ReactNode
 }
