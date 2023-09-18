@@ -3,8 +3,8 @@
 }
 
 .pauseBtn {
-    color: var(--chamois);
-    background-color: var(--cinnabar);
+    color: white;
+    background-color: var(--vermillion);
 }
 
 .resetBtn {

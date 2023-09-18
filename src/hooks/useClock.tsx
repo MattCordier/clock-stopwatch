@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 const useClock = () => {
-    const [seconds, setSeconds] = useState(0)
-    const [minutes, setMinutes] = useState(0)
-    const [hours, setHours] = useState(0)
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+    const [hours, setHours] = useState(0);
 
 
 
@@ -18,15 +18,15 @@ const useClock = () => {
         minutes += seconds / 60;
         hours += minutes / 60;
 
-        setSeconds(seconds)
-        setMinutes(minutes)
-        setHours(hours)
+        setSeconds(seconds);
+        setMinutes(minutes);
+        setHours(hours);
     }
 
 
     useEffect(() => {
         let id = setInterval(() => {
-            setClock(new Date());
+            setClock(new Date())
         }, 40);
 
         return () => clearInterval(id);
