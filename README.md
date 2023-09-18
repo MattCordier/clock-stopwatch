@@ -1,4 +1,4 @@
-# Timepeice
+# Timepiece
 
 The challenge was to build an analog clock in the browser with a stopwatch mode.
 
